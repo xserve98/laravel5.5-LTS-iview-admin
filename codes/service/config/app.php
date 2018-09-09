@@ -178,8 +178,11 @@ return [
         App\Providers\RouteServiceProvider::class,
 
 
-        // Html
+        //  Html
         Collective\Html\HtmlServiceProvider::class,
+
+        //  laravel-ide-helper
+        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
     ],
 
     /*
