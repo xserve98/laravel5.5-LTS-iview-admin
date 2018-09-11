@@ -177,6 +177,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        //  barryvdh/laravel-cors
+        Barryvdh\Cors\ServiceProvider::class,
 
         //  Html
         Collective\Html\HtmlServiceProvider::class,
