@@ -36,4 +36,22 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
+    /**
+     * 自定义跳转路径
+     * @return string
+     */
+    protected function redirectTo()
+    {
+        return '/home';
+    }
+
+    /**
+     * 登录验证字段
+     * @return string
+     */
+    public function username()
+    {
+        return 'email';
+    }
 }
