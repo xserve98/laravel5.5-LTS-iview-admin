@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script type="text/javascript" src="js/jquery-1.9.0.js" ></script>
+    <script type="text/JavaScript">
+        function denglu(){
+            alert("进入单击事件");
+            var username= document.getElementById("adminUser").value;
+            alert("username:"+username);
+            var pass=document.getElementById("passWord").value;
+            alert("password:"+pass);
+            $.ajax({
+                contentType:'application/json',
+                xhrFields: {
+                    withCredentials: true
+                },
+                type:"post",
+                data: JSON.stringify({
+                    adminUser:username,
+                    passWord:pass
+                }),
+                url:"http://localhost/api/admin/login/loginAdmin",
+                success: function(data){
+                    console.log(data);
+                    alert("成功");
+                    //window.location.href = 'main.html';
+                }
+            });
+        }
+
+        function huoqu(){
+            alert("进入单击事件");
+            $.ajax({
+                xhrFields: {
+                    withCredentials: true
+                },
+                type:"get",
+                date:{},
+                url:"http://localhost/api/admin/login/getSessionAdmin",
+                success: function(data){
+                    alert(data);
+                    alert("成功");
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+用户名：<input type="text" id="adminUser" name="adminUser"/><br />
+密码：<input type="text" id="passWord" name="passWord"/><br />
+<input type="button" id="tj" value="登录" onclick="denglu();"/>
+<input type="button" onclick="huoqu();" value="查询当前seesion中的管理员"/>
+</body>
+</html>

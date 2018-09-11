@@ -41,6 +41,11 @@ return [
             'provider' => 'users',
         ],
 
+        'web-manage' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
+
         'api' => [
             'driver' => 'token',
             'provider' => 'users',

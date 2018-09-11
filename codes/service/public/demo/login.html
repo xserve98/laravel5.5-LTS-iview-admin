@@ -1,0 +1,31 @@
+<html>
+<head>
+    <link rel="stylesheet" href="/css/app.css">
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+</head>
+<body>
+
+    <h3>登录测试信息</h3>
+    <script src="/js/app.js"></script>
+    <script>
+        var http = axios();
+        axios.defaults.baseURL = 'http://www.laravel5.me';
+        axios.defaults.headers.common = {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded'
+        };
+        // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+        axios.interceptors.request.use(function (config) {
+            config.withCredentials = true;
+
+            return config;
+        })
+
+        axios.post('/manage/login',
+            {email:'fengyan@1000fun.com', password: '1234567'})
+            .then(function (res) { console.log(res) });
+    </script>
+</body>
+</html>
