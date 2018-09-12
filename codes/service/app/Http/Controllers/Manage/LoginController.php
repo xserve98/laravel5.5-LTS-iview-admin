@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\Manage;
 
 
+use App\Exceptions\ValidatorException;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
@@ -44,9 +45,8 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');
+//        $this->middleware('guest')->except('logout');
     }
-
 
     /**
      * 自定义跳转路径
@@ -77,6 +77,25 @@ class LoginController extends Controller
     }
 
     /**
+     * 登录认证
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     * @throws ValidatorException
+     */
+    public function login(Request $request)
+    {
+        if (empty($request->email) || empty($request->password)) {
+            throw new ValidatorException("请输入账号和密码！");
+        }
+
+        if (!$this->attemptLogin($request)) {
+            throw new ValidatorException("账号或密码错误，请重新输入！");
+        }
+
+        return $this->sendLoginResponse($request);
+    }
+
+    /**
      * @param Request $request
      * @param $user
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
@@ -86,5 +105,29 @@ class LoginController extends Controller
         $user->csrf_token = csrf_token();
 
         return $this->success('登录成功', ['userInfo' => $user]);
+    }
+
+    /**
+     * 测试获取session
+     * @return \Illuminate\Contracts\Auth\Authenticatable|null
+     */
+    public function getSession()
+    {
+//        $this->middleware('auth:web-manage');
+        return Auth::guard('web-manage')->user();
+    }
+
+    /**
+     * Log the user out of the application.
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
+     */
+    public function logout(Request $request)
+    {
+        $this->guard()->logout();
+
+        $request->session()->invalidate();
+
+        return $this->success('退出成功');
     }
 }
