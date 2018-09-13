@@ -84,6 +84,7 @@ class LoginController extends Controller
      */
     public function login(Request $request)
     {
+        $request->all();
         if (empty($request->email) || empty($request->password)) {
             throw new ValidatorException("请输入账号和密码！");
         }

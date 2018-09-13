@@ -71,11 +71,11 @@ class Handler extends ExceptionHandler
         } else if($exception instanceof ApiException) {
             return $this->error($exception->getMessage(), $exception->getData(), $exception->getJumpUrl(), $exception->getWaitTime(), $exception->getHttpStatus());
         } else if ($exception instanceof QueryException) {
-            return $this->error('系统错误，请稍后再试！'.$exception->getMessage());
+            return $this->error('系统错误，请稍后再试！'.$exception->getMessage(), [], '', 2, 500);
         } else if ($exception instanceof \Illuminate\Auth\AuthenticationException) {
-            return $this->error('请先登录！', '', '', 2, 200, [], ValidatorException::NO_LOGIN);
+            return $this->error('请先登录！', '', '', 2, 401, [], ValidatorException::NO_LOGIN);
         } else if ($exception instanceof \Illuminate\Foundation\Http\Middleware\VerifyCsrfToken) {
-            return $this->error('CSRF-TOKEN验证失败!'.$exception->getMessage());
+            return $this->error('CSRF-TOKEN验证失败!'.$exception->getMessage(), [], '', 2, 500);
         }
 
         return parent::render($request, $exception);

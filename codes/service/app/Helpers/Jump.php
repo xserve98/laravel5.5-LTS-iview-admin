@@ -130,6 +130,7 @@ trait Jump
      * @param int $wait
      * @param int $httpStatus
      * @param array $header
+     * @param string $type
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
      */
     protected function success($msg = '', $data = '', $url = null, $wait = 2, $httpStatus = 200, array $header = [], $type = 'success')
