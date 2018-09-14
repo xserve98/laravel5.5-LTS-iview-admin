@@ -1,8 +1,5 @@
 <?php
-Route::get('/', function () {
 
-    return view('welcome');
-});
 //  登录
 Route::post('/login', 'LoginController@login');
 

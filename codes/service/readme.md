@@ -12,3 +12,18 @@
 * composer require simplesoftwareio/simple-qrcode   Simple QrCode是为Laravel制作的QR码生成器。
 * composer require zedisdog/laravel-schema-extend   数据迁移扩展包　可生成表注释
 * composer require --dev barryvdh/laravel-ide-helper    Laravel IDE Helper为所有Facade类生成正确的PHPDoc，以改进自动完成。
+
+#### 优化
+* php artisan route:cache   缓存路由
+* php artisan config:cache  缓存配置文件
+* php artisan optimize      Laravel优化命令
+* composer dump-autoload --optimize 优化composer
+
+#### 优化脚本
+#!/usr/bin/env bash
+php artisan clear-compiled
+php artisan cache:clear
+php artisan route:cache
+php artisan config:cache
+php artisan optimize --force
+composer dump-autoload --optimize

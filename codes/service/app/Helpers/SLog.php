@@ -25,7 +25,7 @@ class SLog
         'show_included_files'=>false,
         'error_handler'=>true,
         //日志强制记录到配置的client_id
-        'force_client_id'=>'imp-cloud-test',
+        'force_client_id'=>'test',
         //限制允许读取日志的client_id
         'allow_client_ids'=>array()
     );
