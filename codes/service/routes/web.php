@@ -11,12 +11,12 @@
 |
 */
 
-/*Route::get('/', function () {
+Route::get('/', function () {
     $arr = ['hello'=>'world'];
     ChromePhp::info($arr);
     \App\Helpers\SLog::info($arr);
     return view('welcome');
-});*/
+});
 
 Auth::routes();
 
