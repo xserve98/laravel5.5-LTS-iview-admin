@@ -15,7 +15,13 @@ Route::get('/', function () {
     $arr = ['hello'=>'world'];
     ChromePhp::info($arr);
     \App\Helpers\SLog::info($arr);
-    return view('welcome');
+
+    (new guiguoershao\WebSocket\WebSocketApp())->push();
+//    return view('welcome');
+});
+
+Route::post('/getSign', function () {
+   return (new guiguoershao\WebSocket\WebSocketApp())->createConnectUrl();
 });
 
 Auth::routes();
