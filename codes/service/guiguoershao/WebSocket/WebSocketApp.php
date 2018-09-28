@@ -9,15 +9,22 @@
 namespace guiguoershao\WebSocket;
 
 
-use guiguoershao\WebSocket\client\Request;
+use guiguoershao\WebSocket\Base\Config;
+use guiguoershao\WebSocket\Base\Loader;
+use guiguoershao\WebSocket\Client\Request;
 use guiguoershao\WebSocket\Server\SwooleServer;
 
 class WebSocketApp
 {
 
-    public function __construct()
+    /**
+     * 初始化配置
+     * WebSocketApp constructor.
+     * @param $appName
+     */
+    public function __construct($appName = 'default')
     {
-
+        Config::init($appName, ['host'=>env('REDIS_HOST'),'port'=>env('REDIS_PORT'), 'pass'=>env('REDIS_PASSWORD'), 'db'=>1], ['ws'=>env('WS_SERVER'), 'http'=>env('HTTP_SERVER')]);
     }
 
     public function start()
@@ -31,9 +38,14 @@ class WebSocketApp
         }
     }
 
+    /**
+     * 创建web socket链接
+     * @param int $clientId
+     * @return string
+     */
     public function createConnectUrl($clientId=10086)
     {
-        return env('WS_SERVER').'?a=1&b=2&c=3&client_id='.$clientId;
+        return Loader::sign()->createConnectUrl($clientId);
     }
 
     public function push($clientId=10086)

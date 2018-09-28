@@ -1,6 +1,6 @@
 <?php
 
-namespace guiguoershao\WebSocket\client;
+namespace guiguoershao\WebSocket\Client;
 
 /**
  * 请求
