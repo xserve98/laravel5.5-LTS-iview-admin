@@ -1,6 +1,7 @@
 <?php
 
 namespace guiguoershao\WebSocket\Client;
+use guiguoershao\WebSocket\Base\Loader;
 
 /**
  * 请求
@@ -9,11 +10,6 @@ namespace guiguoershao\WebSocket\Client;
  */
 class Request
 {
-    /**
-     * @var Config
-     */
-    protected $config;
-
     /**
      * Request constructor.
      * @throws \Exception
@@ -24,14 +20,22 @@ class Request
 
     /**
      * 创建请求
-     * @param $clientId
-     * @param array $data
+     * @param $clientId     客户端推送编号
+     * @param $serviceName  推送消息服务类型名称
+     * @param $pushMsgType  消息类型
+     * @param array $data   消息内容
      * @return mixed
      * @throws \Exception
      */
-    public function http($clientId, array $data)
+    public function http($clientId, $serviceName, $pushMsgType, array $data)
     {
-        return $this->_send(env('HTTP_SERVER'), http_build_query(['client_id'=>$clientId, 'data'=>$data]));
+        $query = Loader::sign()->createRequestParams($clientId,  $serviceName, $pushMsgType);
+
+        if (empty($query)) {
+            throw new \Exception("请求参数不能为空,请检查");
+        }
+
+        return $this->_send(Loader::config()->getServerLinks()['http'], $query);
     }
 
     /**

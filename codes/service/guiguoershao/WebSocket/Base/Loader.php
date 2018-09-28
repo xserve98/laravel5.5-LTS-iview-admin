@@ -9,6 +9,8 @@
 namespace guiguoershao\WebSocket\Base;
 
 
+use guiguoershao\WebSocket\Client\Request;
+
 class Loader
 {
     /**
@@ -19,6 +21,8 @@ class Loader
 
 
     private static $_sign;
+
+    private static $_request;
 
     /**
      * 获取redis实例对象
@@ -60,5 +64,18 @@ class Loader
     public static function config(): Config
     {
         return Config::getInstance();
+    }
+
+    /**
+     * 客户端请求对象
+     * @return Request
+     */
+    public static function request(): Request
+    {
+        if (!(self::$_request instanceof Request)) {
+            self::$_request = new Request();
+        }
+
+        return self::$_request;
     }
 }

@@ -30,9 +30,7 @@ class WebSocketApp
     public function start()
     {
         try {
-            echo 'Hello';
-            echo env('WS_SERVER');
-            SwooleServer::getInstance('0.0.0.0', '9501')->start();
+            SwooleServer::getInstance()->start();
         } catch (\Exception $exception) {
             echo $exception->getMessage();
         }
@@ -48,11 +46,16 @@ class WebSocketApp
         return Loader::sign()->createConnectUrl($clientId);
     }
 
-    public function push($clientId=10086)
+    /**
+     * 普通消息推送
+     * @param int $clientId
+     * @param $pushMsgType
+     * @param array $data
+     * @return mixed
+     */
+    public function pushMessage($clientId = 10086, $pushMsgType, array $data = [])
     {
-        $request = (new Request());
-
-        return $request->http($clientId, ['a'=>1,'b'=>2,'c'=>3,'d'=>4]);
+        return Loader::request()->http($clientId, 'message', $pushMsgType, $data);
     }
 
 }

@@ -20,15 +20,22 @@ class Sign
      */
     public function createConnectUrl($clientId)
     {
-        $appName = Loader::config()->getAppName();
-
-        if (empty(Loader::config()->getAppKeyByName($appName))) {
-            throw new \Exception("签名秘钥不能为空");
-        }
-
         $query = $this->createQueryData($clientId, 'auth');
 
         return Loader::config()->getServerLinks()['ws'] . '?' . http_build_query($query);
+    }
+
+    /**
+     * 创建请求客户端请求推送参数
+     * @param $clientId
+     * @param $serviceName
+     * @param string $pushMsgType
+     * @param array $data
+     * @return array|null
+     */
+    public function createRequestParams($clientId,  $serviceName, $pushMsgType = '', array $data = [])
+    {
+        return $this->createQueryData($clientId, $serviceName, $pushMsgType, $data);
     }
 
     /**
@@ -41,7 +48,7 @@ class Sign
      * @return array|null
      * @throws \Exception
      */
-    public function createQueryData($clientId, $serviceName, $pushMsgType = '', array $data = [])
+    private function createQueryData($clientId, $serviceName, $pushMsgType = '', array $data = [])
     {
         $appName = Loader::config()->getAppName();
 

@@ -16,7 +16,7 @@ Route::get('/', function () {
     ChromePhp::info($arr);
     \App\Helpers\SLog::info($arr);
 
-    (new guiguoershao\WebSocket\WebSocketApp())->push();
+    (new guiguoershao\WebSocket\WebSocketApp())->pushMessage(10086, 'basic', ['a'=>1, 'b'=>2]);
 //    return view('welcome');
 });
 

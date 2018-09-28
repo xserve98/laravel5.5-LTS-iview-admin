@@ -37,7 +37,7 @@ class Config
      * swoole server info
      * @var array
      */
-    private $serverConnectInfo = ['ip'=>'127.0.0.1', 'post'=>'9501'];
+    private $serverConnectInfo = ['ip'=>'127.0.0.1', 'port'=>'9501'];
 
     /**
      * 数据签名相关配置项
@@ -70,7 +70,7 @@ class Config
      * @param array $serverConnectInfo  ['ip'=>'127.0.0.1', 'post'=>'9501']
      * @param array $signConfig         ['expireIn'=>600];
      */
-    public static function init(string $appName, array $redisConfig = [], array $serverLinks = [], array $serverConnectInfo = ['ip'=>'127.0.0.1', 'post'=>'9501'], array $signConfig = ['expireIn'=>600])
+    public static function init(string $appName, array $redisConfig = [], array $serverLinks = [], array $serverConnectInfo = ['ip'=>'127.0.0.1', 'port'=>'9501'], array $signConfig = ['expireIn'=>600])
     {
         self::$instance = new self($appName, $redisConfig, $serverLinks, $serverConnectInfo, $signConfig);
     }

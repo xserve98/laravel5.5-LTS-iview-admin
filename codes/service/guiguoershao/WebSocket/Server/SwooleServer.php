@@ -9,6 +9,7 @@
 namespace guiguoershao\WebSocket\Server;
 
 use function foo\func;
+use guiguoershao\WebSocket\Base\Loader;
 use guiguoershao\WebSocket\Base\Util;
 use swoole_http_request;
 use swoole_websocket_frame;
@@ -46,12 +47,12 @@ class SwooleServer
 
     /**
      * 获取单例
-     * @param $ip
-     * @param $port
      * @return mixed
      */
-    public static function getInstance($ip, $port) : self
+    public static function getInstance() : self
     {
+        $ip = Loader::config()->getServerConnectInfo()['ip'];
+        $port = Loader::config()->getServerConnectInfo()['port'];
         $keys = md5("{$ip},{$port}");
         if (empty(self::$instance[$keys])) {
             self::$instance[$keys] = new self($ip, $port);
