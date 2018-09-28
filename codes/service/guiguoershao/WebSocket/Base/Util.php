@@ -1,9 +1,9 @@
 <?php
 
-namespace guiguoershao\WebSocket\base;
+namespace guiguoershao\WebSocket\Base;
 /**
  * Class Util
- * @package websocket\base
+ * @package websocket\Base
  */
 class Util
 {

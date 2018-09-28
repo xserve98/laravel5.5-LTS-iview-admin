@@ -2,9 +2,6 @@
 
 namespace guiguoershao\WebSocket\client;
 
-use websocket\base\Config;
-use websocket\base\Sign;
-
 /**
  * 请求
  * Class Request
@@ -34,7 +31,7 @@ class Request
      */
     public function http($clientId, array $data)
     {
-        return $this->_send('http://www.laravel5.me:9501', http_build_query(['client_id'=>$clientId, 'data'=>$data]));
+        return $this->_send(env('HTTP_SERVER'), http_build_query(['client_id'=>$clientId, 'data'=>$data]));
     }
 
     /**
@@ -44,8 +41,6 @@ class Request
      */
     private function _send($url, $query)
     {
-        print_r($query);
-
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

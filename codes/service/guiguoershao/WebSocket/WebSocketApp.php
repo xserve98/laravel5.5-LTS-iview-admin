@@ -23,8 +23,9 @@ class WebSocketApp
     public function start()
     {
         try {
-            SwooleServer::getInstance('0.0.0.0', '9501')->start();
             echo 'Hello';
+            echo env('WS_SERVER');
+            SwooleServer::getInstance('0.0.0.0', '9501')->start();
         } catch (\Exception $exception) {
             echo $exception->getMessage();
         }
@@ -32,7 +33,7 @@ class WebSocketApp
 
     public function createConnectUrl($clientId=10086)
     {
-        return 'ws://www.laravel5.me:9501?a=1&b=2&c=3&client_id='.$clientId;
+        return env('WS_SERVER').'?a=1&b=2&c=3&client_id='.$clientId;
     }
 
     public function push($clientId=10086)
