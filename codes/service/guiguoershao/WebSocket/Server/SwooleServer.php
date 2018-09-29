@@ -7,10 +7,11 @@
  */
 
 namespace guiguoershao\WebSocket\Server;
-
-use function foo\func;
 use guiguoershao\WebSocket\Base\Loader;
+use guiguoershao\WebSocket\Base\Response;
 use guiguoershao\WebSocket\Base\Util;
+use guiguoershao\WebSocket\Service\MessageService;
+use guiguoershao\WebSocket\Service\UserService;
 use swoole_http_request;
 use swoole_websocket_frame;
 use swoole_websocket_server;
@@ -30,6 +31,18 @@ class SwooleServer
     private $server;
 
     /**
+     *
+     * @var
+     */
+    private $user;
+
+    /**
+     *
+     * @var
+     */
+    private $message;
+
+    /**
      * 启动开始时间
      * @var
      */
@@ -43,6 +56,8 @@ class SwooleServer
     private function __construct($ip, $port)
     {
         $this->server = new swoole_websocket_server($ip, $port);
+        $this->user = Loader::user();
+        $this->message = Loader::message();
     }
 
     /**
@@ -53,13 +68,13 @@ class SwooleServer
     {
         $ip = Loader::config()->getServerConnectInfo()['ip'];
         $port = Loader::config()->getServerConnectInfo()['port'];
-        $keys = md5("{$ip},{$port}");
-        if (empty(self::$instance[$keys])) {
-            self::$instance[$keys] = new self($ip, $port);
-            self::$instance[$keys]->startTime = date('YmdHis');
+        // $keys = md5("{$ip},{$port}");
+        if (empty(self::$instance)) {
+            self::$instance = new self($ip, $port);
+            self::$instance->startTime = date('YmdHis');
         }
 
-        return self::$instance[$keys];
+        return self::$instance;
     }
 
     /**
@@ -75,11 +90,22 @@ class SwooleServer
         $server->on('open', function (swoole_websocket_server $ws, swoole_http_request $request) {
             Util::ps('open', "用户接入fd:{$request->fd}");
 
-            //  接收请求参数
-            $params = property_exists($request, 'post') ? $request->post : (property_exists($request, 'get') ? $request->get : []);
+            try {
 
-            //  参数鉴权
-            Loader::auth()->verify($params);
+                //  接收请求参数
+                $params = property_exists($request, 'post') ? $request->post : (property_exists($request, 'get') ? $request->get : []);
+
+                //  参数鉴权
+                Loader::auth()->verify($params);
+
+                //  连贯操作 绑定用户监听器 推送消息 释放监听器
+                $this->bindUserListener($request->fd, $params['client_id'])
+                    ->push($request->fd, Loader::response()->getInstance($params))
+                    ->unbindUserListener($request->fd);
+
+            } catch (\Exception $exception) {
+                //  记录错误信息
+            }
         });
 
         /**
@@ -117,4 +143,43 @@ class SwooleServer
 
         $server->start();
     }
+
+    /**
+     * 绑定用户监听器
+     * @param $fd
+     * @param $clientId
+     * @return SwooleServer
+     */
+    private function bindUserListener($fd, $clientId): self
+    {
+        $this->user->bind($fd, $clientId);
+
+        return $this;
+    }
+
+    /**
+     * 消息推送
+     * @param $fd
+     * @param Response $response
+     * @return $this
+     */
+    private function push($fd, Response $response)
+    {
+        $this->server->push($fd, $response->toJson());
+
+        return $this;
+    }
+
+    /**
+     * 用户释放监听器
+     * @param $fd
+     * @return $this
+     */
+    private function unbindUserListener($fd)
+    {
+        $this->server->close($fd);
+
+        return $this;
+    }
+
 }

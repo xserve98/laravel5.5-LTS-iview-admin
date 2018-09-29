@@ -11,6 +11,8 @@ namespace guiguoershao\WebSocket\Base;
 
 use guiguoershao\WebSocket\Client\Request;
 use guiguoershao\WebSocket\Service\AuthService;
+use guiguoershao\WebSocket\Service\MessageService;
+use guiguoershao\WebSocket\Service\UserService;
 
 class Loader
 {
@@ -92,5 +94,22 @@ class Loader
     public static function auth(): AuthService
     {
         return AuthService::getInstance();
+    }
+
+    /**
+     *
+     * @return UserService
+     */
+    public static function user(): UserService
+    {
+        return UserService::getInstance();
+    }
+
+    /**
+     * @return MessageService
+     */
+    public static function message(): MessageService
+    {
+        return MessageService::getInstance();
     }
 }

@@ -11,6 +11,9 @@ namespace guiguoershao\WebSocket\Base;
 
 class Config
 {
+    const ONLINE_USER_SET = "ws:on:u:set:";
+    const ONLINE_FD_STRING = "ws:on:fid:str:";
+
     const APP_LIST = [
         'default' => 'GHCkSOgnDxxjpnAw1Ki1WhSX7g9X2auVo4QY3I8F1Cs',
     ];
