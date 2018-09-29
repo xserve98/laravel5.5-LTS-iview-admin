@@ -83,7 +83,7 @@ class Sign
      * @param $query
      * @return bool
      */
-    private function checkParams($query)
+    public function checkParams($query)
     {
         if (empty($query['app_name']) ||
             empty($query['client_id']) ||
@@ -119,5 +119,33 @@ class Sign
         ksort($params);
 
         return md5(http_build_query($params) . "&secret_key={$signSecretKey}");
+    }
+
+    /**
+     * 请求时效性检测充许有10s误差
+     * @param $timestamp
+     * @param $expireIn
+     * @return bool
+     */
+    public function verifyRequestIsExpire($timestamp, $expireIn)
+    {
+        $time = time();
+        if ((abs($time - $timestamp) < 10) && $time - ($expireIn + $timestamp) > -10) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 签名验证
+     * @param $data
+     * @param $sign
+     * @return bool
+     */
+    public function verifySign($data, $sign)
+    {
+        $verifySign = $this->createSign($data);
+
+        return !empty($verifySign) && ($verifySign === $sign);
     }
 }

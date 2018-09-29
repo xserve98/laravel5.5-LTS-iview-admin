@@ -74,6 +74,12 @@ class SwooleServer
          */
         $server->on('open', function (swoole_websocket_server $ws, swoole_http_request $request) {
             Util::ps('open', "用户接入fd:{$request->fd}");
+
+            //  接收请求参数
+            $params = property_exists($request, 'post') ? $request->post : (property_exists($request, 'get') ? $request->get : []);
+
+            //  参数鉴权
+            Loader::auth()->verify($params);
         });
 
         /**
@@ -84,7 +90,12 @@ class SwooleServer
         });
 
         $server->on('request', function (swoole_http_request $request, swoole_http_response $response) use ($server) {
+            //  接收请求参数
             $params = property_exists($request, 'post') ? $request->post : (property_exists($request, 'get') ? $request->get : []);
+
+            //  参数鉴权
+            Loader::auth()->verify($params);
+
             Util::ps('request', "http请求:".json_encode([$params]));
             $server->push('1', json_encode(['code'=>'1', 'message'=>'测试消息内容', 'data'=>$params], JSON_UNESCAPED_UNICODE));
             $response->end("<h1>Hello Swoole. #".rand(1000, 9999)."</h1>");

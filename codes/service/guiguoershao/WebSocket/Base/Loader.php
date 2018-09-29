@@ -10,6 +10,7 @@ namespace guiguoershao\WebSocket\Base;
 
 
 use guiguoershao\WebSocket\Client\Request;
+use guiguoershao\WebSocket\Service\AuthService;
 
 class Loader
 {
@@ -77,5 +78,19 @@ class Loader
         }
 
         return self::$_request;
+    }
+
+    public static function response(): Response
+    {
+
+    }
+
+    /**
+     * 参数鉴权
+     * @return AuthService
+     */
+    public static function auth(): AuthService
+    {
+        return AuthService::getInstance();
     }
 }
