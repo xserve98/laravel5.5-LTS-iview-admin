@@ -44,28 +44,28 @@ class Response
         return new self($data);
     }
 
-    public function setCode($val) : self
+    public function setCode($val): self
     {
         $this->responseData['code'] = $val;
 
         return $this;
     }
 
-    public function setMessage($val) : self
+    public function setMessage($val): self
     {
         $this->responseData['msg'] = $val;
 
         return $this;
     }
 
-    public function setMsgType($val) : self
+    public function setMsgType($val): self
     {
         $this->responseData['msgType'] = $val;
 
         return $this;
     }
 
-    public function setData(array $val) : self
+    public function setData(array $val): self
     {
         $this->responseData['data'] = $val;
 
@@ -75,7 +75,7 @@ class Response
     /**
      * @return array
      */
-    public function toArray() : array
+    public function toArray(): array
     {
         return $this->responseData;
     }

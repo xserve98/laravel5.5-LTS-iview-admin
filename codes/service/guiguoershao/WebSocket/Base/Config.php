@@ -11,7 +11,14 @@ namespace guiguoershao\WebSocket\Base;
 
 class Config
 {
+    /**
+     * 在线用户键名称
+     */
     const ONLINE_USER_SET = "ws:on:u:set:";
+
+    /**
+     * 在线fd编号redis键名称
+     */
     const ONLINE_FD_STRING = "ws:on:fid:str:";
 
     const APP_LIST = [

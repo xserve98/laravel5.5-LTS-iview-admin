@@ -24,7 +24,7 @@ class WebSocketApp
      */
     public function __construct($appName = 'default')
     {
-        Config::init($appName, ['host'=>env('REDIS_HOST'),'port'=>env('REDIS_PORT'), 'pass'=>env('REDIS_PASSWORD'), 'db'=>1], ['ws'=>env('WS_SERVER'), 'http'=>env('HTTP_SERVER')]);
+        Config::init($appName, ['host' => env('REDIS_HOST'), 'port' => env('REDIS_PORT'), 'pass' => env('REDIS_PASSWORD'), 'db' => 1], ['ws' => env('WS_SERVER'), 'http' => env('HTTP_SERVER')]);
     }
 
     public function start()
@@ -41,7 +41,7 @@ class WebSocketApp
      * @param int $clientId
      * @return string
      */
-    public function createConnectUrl($clientId=10086)
+    public function createConnectUrl($clientId = 10086)
     {
         return Loader::sign()->createConnectUrl($clientId);
     }

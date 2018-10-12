@@ -67,7 +67,7 @@ class UserService
      */
     private function getUserKey($clientId)
     {
-        return Loader::config()::ONLINE_USER_SET.$clientId;
+        return Loader::config()::ONLINE_USER_SET . $clientId;
     }
 
     /**
@@ -77,6 +77,6 @@ class UserService
      */
     private function getFdKey($fd)
     {
-        return Loader::config()::ONLINE_FD_STRING.$fd;
+        return Loader::config()::ONLINE_FD_STRING . $fd;
     }
 }

@@ -11,6 +11,7 @@ namespace guiguoershao\WebSocket\Service;
 
 use guiguoershao\WebSocket\Base\Response;
 use swoole_websocket_server;
+
 class MessageService
 {
     /**
@@ -18,7 +19,7 @@ class MessageService
      * @return MessageService
      * @throws \Exception
      */
-    public static function getInstance() : MessageService
+    public static function getInstance(): MessageService
     {
         return new MessageService();
     }

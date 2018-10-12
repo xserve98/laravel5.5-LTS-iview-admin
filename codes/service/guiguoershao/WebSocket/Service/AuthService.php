@@ -32,15 +32,15 @@ class AuthService
      */
     public function verify(array $data)
     {
-        if (! Loader::sign()->checkParams($data)) {
+        if (!Loader::sign()->checkParams($data)) {
             throw new \Exception("参数格式错误", RespEnum::PARAM_ERROR);
         }
 
-        if (! Loader::sign()->verifyRequestIsExpire($data['timestamp'], $data['expire_in'])) {
+        if (!Loader::sign()->verifyRequestIsExpire($data['timestamp'], $data['expire_in'])) {
             throw new \Exception("请求过期", RespEnum::REQUEST_EXPIRE);
         }
 
-        if (! Loader::sign()->verifySign($data, $data['sign'])) {
+        if (!Loader::sign()->verifySign($data, $data['sign'])) {
             throw new \Exception("签名验证失败", RespEnum::SIGN_ERROR);
         }
 

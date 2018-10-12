@@ -7,6 +7,7 @@
  */
 
 namespace guiguoershao\WebSocket\Server;
+
 use guiguoershao\WebSocket\Base\Loader;
 use guiguoershao\WebSocket\Base\Response;
 use guiguoershao\WebSocket\Base\Util;
@@ -16,6 +17,7 @@ use swoole_http_request;
 use swoole_websocket_frame;
 use swoole_websocket_server;
 use swoole_http_response;
+
 class SwooleServer
 {
     /**
@@ -64,7 +66,7 @@ class SwooleServer
      * 获取单例
      * @return mixed
      */
-    public static function getInstance() : self
+    public static function getInstance(): self
     {
         $ip = Loader::config()->getServerConnectInfo()['ip'];
         $port = Loader::config()->getServerConnectInfo()['port'];
@@ -122,9 +124,9 @@ class SwooleServer
             //  参数鉴权
             Loader::auth()->verify($params);
 
-            Util::ps('request', "http请求:".json_encode([$params]));
-            $server->push('1', json_encode(['code'=>'1', 'message'=>'测试消息内容', 'data'=>$params], JSON_UNESCAPED_UNICODE));
-            $response->end("<h1>Hello Swoole. #".rand(1000, 9999)."</h1>");
+            Util::ps('request', "http请求:" . json_encode([$params]));
+            $server->push('1', json_encode(['code' => '1', 'message' => '测试消息内容', 'data' => $params], JSON_UNESCAPED_UNICODE));
+            $response->end("<h1>Hello Swoole. #" . rand(1000, 9999) . "</h1>");
         });
 
         /**

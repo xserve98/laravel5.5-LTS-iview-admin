@@ -33,7 +33,7 @@ class Sign
      * @param array $data
      * @return array|null
      */
-    public function createRequestParams($clientId,  $serviceName, $pushMsgType = '', array $data = [])
+    public function createRequestParams($clientId, $serviceName, $pushMsgType = '', array $data = [])
     {
         return $this->createQueryData($clientId, $serviceName, $pushMsgType, $data);
     }
@@ -43,8 +43,8 @@ class Sign
      * @param $appName      应用名称
      * @param $clientId     客户端编号
      * @param $serviceName  服务名称
-     * @param string $pushMsgType   消息推送类型
-     * @param array $data   推送数据
+     * @param string $pushMsgType 消息推送类型
+     * @param array $data 推送数据
      * @return array|null
      * @throws \Exception
      */
