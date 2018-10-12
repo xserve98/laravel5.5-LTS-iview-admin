@@ -82,9 +82,14 @@ class Loader
         return self::$_request;
     }
 
-    public static function response(): Response
+    /**
+     *
+     * @param array $data
+     * @return Response
+     */
+    public static function response(array $data = []): Response
     {
-
+        return Response::getInstance($data);
     }
 
     /**

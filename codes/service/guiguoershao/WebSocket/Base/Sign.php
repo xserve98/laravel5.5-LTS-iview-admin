@@ -20,7 +20,7 @@ class Sign
      */
     public function createConnectUrl($clientId)
     {
-        $query = $this->createQueryData($clientId, 'auth');
+        $query = $this->createQueryData($clientId, Loader::config()::SERVICE_AUTH);
 
         return Loader::config()->getServerLinks()['ws'] . '?' . http_build_query($query);
     }
@@ -40,7 +40,6 @@ class Sign
 
     /**
      * 创建请求参数
-     * @param $appName      应用名称
      * @param $clientId     客户端编号
      * @param $serviceName  服务名称
      * @param string $pushMsgType 消息推送类型

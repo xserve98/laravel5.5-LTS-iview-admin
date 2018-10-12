@@ -36,6 +36,11 @@ class Config
      */
     const SERVICE_MESSAGE = 'message';
 
+    /**
+     * 在线统计
+     */
+    const USER_ONLINE_COUNT = "user.onlineCount";
+
     const APP_LIST = [
         'default' => 'GHCkSOgnDxxjpnAw1Ki1WhSX7g9X2auVo4QY3I8F1Cs',
     ];

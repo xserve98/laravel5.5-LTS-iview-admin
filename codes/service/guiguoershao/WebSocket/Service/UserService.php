@@ -79,4 +79,39 @@ class UserService
     {
         return Loader::config()::ONLINE_FD_STRING . $fd;
     }
+
+    /**
+     * 获取该客户端的用户集合
+     * @param $clientId
+     * @return array
+     */
+    public function findUserSet($clientId)
+    {
+        return Loader::redis()->sMembers($this->getUserKey($clientId));
+    }
+
+    public function getOnlineCount($clientId, \swoole_websocket_server $server)
+    {
+        $fdList = $this->findUserSet($clientId);
+
+        if (!$fdList || !is_array($fdList)) {
+            throw new \Exception('获取在线连接数为空');
+        }
+
+        $onlineUserCount = 0;
+        foreach ($fdList as $fd) {
+            if (!$server->exist($fd)) {
+                $this->unbindByClientId($clientId, $fd);
+                continue;
+            }
+            if (!$this->clearInvalidUser($clientId, $fd)) {
+                continue;
+            }
+            $onlineUserCount++;
+        }
+
+        if ($onlineUserCount < 1) {
+            throw new \Exception('无在线客户端');
+        }
+    }
 }

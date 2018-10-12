@@ -9,6 +9,7 @@
 namespace guiguoershao\WebSocket\Service;
 
 
+use guiguoershao\WebSocket\Base\Loader;
 use guiguoershao\WebSocket\Base\Response;
 use swoole_websocket_server;
 
@@ -24,8 +25,30 @@ class MessageService
         return new MessageService();
     }
 
-    public function push($clientId, Response $response, swoole_websocket_server $server)
+    public function push($clientId, Response $response, UserService $userService, swoole_websocket_server $server)
     {
+        $onlineUserCount = 0;
 
+        $fdList = Loader::user()->findUserSet($clientId);
+
+        if (!$fdList || !is_array($fdList)) {
+            throw new \Exception('获取在线连接数为空');
+        }
+
+        foreach ($fdList as $fd) {
+            if (!$server->exist($fd)) {
+                $userService->unbindByClientId($clientId, $fd);
+                continue;
+            }
+            if (!$userService->clearInvalidUser($clientId, $fd)) {
+                continue;
+            }
+            $server->push($fd, $response->toJson());
+            $onlineUserCount++;
+        }
+
+        if ($onlineUserCount < 1) {
+            $response->setMsg('无在线客户端');
+        }
     }
 }

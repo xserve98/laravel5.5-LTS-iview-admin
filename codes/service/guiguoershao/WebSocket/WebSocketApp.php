@@ -55,7 +55,7 @@ class WebSocketApp
      */
     public function pushMessage($clientId = 10086, $pushMsgType, array $data = [])
     {
-        return Loader::request()->http($clientId, 'message', $pushMsgType, $data);
+        return Loader::request()->http($clientId, Loader::config()::SERVICE_MESSAGE, $pushMsgType, $data);
     }
 
 }

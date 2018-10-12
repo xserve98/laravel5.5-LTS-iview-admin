@@ -100,9 +100,11 @@ class SwooleServer
                 //  参数鉴权
                 Loader::auth()->verify($params);
 
+                $this->user = Loader::user();
+
                 //  连贯操作 绑定用户监听器 推送消息 释放监听器
                 $this->bindUserListener($request->fd, $params['client_id'])
-                    ->push($request->fd, Loader::response()->getInstance($params))
+                    ->push($request->fd, Loader::response($params))
                     ->unbindUserListener($request->fd);
 
             } catch (\Exception $exception) {
@@ -118,15 +120,39 @@ class SwooleServer
         });
 
         $server->on('request', function (swoole_http_request $request, swoole_http_response $response) use ($server) {
-            //  接收请求参数
-            $params = property_exists($request, 'post') ? $request->post : (property_exists($request, 'get') ? $request->get : []);
+            try {
+                //  接收请求参数
+                $params = property_exists($request, 'post') ? $request->post : (property_exists($request, 'get') ? $request->get : []);
 
-            //  参数鉴权
-            Loader::auth()->verify($params);
+                //  参数鉴权
+                Loader::auth()->verify($params);
 
-            Util::ps('request', "http请求:" . json_encode([$params]));
-            $server->push('1', json_encode(['code' => '1', 'message' => '测试消息内容', 'data' => $params], JSON_UNESCAPED_UNICODE));
-            $response->end("<h1>Hello Swoole. #" . rand(1000, 9999) . "</h1>");
+                Util::ps('request', "http请求:" . json_encode([$params]));
+
+                $this->user = Loader::user();
+
+                switch ($params['service']) {
+                    case Loader::config()::SERVICE_MESSAGE:
+                        $this->message->push($params['client_id'], Loader::response($params), $this->server);
+                        break;
+
+                    case Loader::config()::USER_ONLINE_COUNT:
+                        $this->user->getOnlineCount($params['client_id'], $this->server);
+                        break;
+
+                    default:
+                        throw new \Exception('未知操作');
+                        break;
+                }
+
+                // $server->push('1', json_encode(['code' => '1', 'message' => '测试消息内容', 'data' => $params['data']], JSON_UNESCAPED_UNICODE));
+
+
+                $response->end("<h1>Hello Swoole. #" . rand(1000, 9999) . "</h1>");
+            } catch (\Exception $exception) {
+                //  记录错误信息
+            }
+
         });
 
         /**
@@ -134,6 +160,9 @@ class SwooleServer
          */
         $server->on('close', function ($ws, $fd) {
             Util::ps('close', "关闭链接,fd:{$fd}");
+            //  解除绑定
+            $this->user = Loader::user();
+            $this->user->unbind($fd);
         });
 
         /**

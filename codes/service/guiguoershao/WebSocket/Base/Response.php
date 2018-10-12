@@ -27,7 +27,7 @@ class Response
     public function setResponseData(array $data = [])
     {
         isset($data['code']) && $this->setCode($data['code']);
-        isset($data['code']) && $this->setCode($data['code']);
+        isset($data['service']) && $this->setService($data['service']);
         isset($data['msg']) && $this->setMessage($data['msg']);
         isset($data['msgType']) && $this->setMsgType($data['msgType']);
         isset($data['data']) && $this->setData($data['data']);
@@ -39,7 +39,7 @@ class Response
      * @param array $data
      * @return Response
      */
-    public function getInstance(array $data = [])
+    public static function getInstance(array $data = [])
     {
         return new self($data);
     }
@@ -47,6 +47,13 @@ class Response
     public function setCode($val): self
     {
         $this->responseData['code'] = $val;
+
+        return $this;
+    }
+
+    public function setService($val) : self
+    {
+        $this->responseData['service'] = $val;
 
         return $this;
     }
