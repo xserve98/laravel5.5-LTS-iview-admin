@@ -21,8 +21,35 @@ class Config
      */
     const ONLINE_FD_STRING = "ws:on:fid:str:";
 
+    /**
+     * 授权服务名称
+     */
+    const SERVICE_AUTH = 'auth';
+
+    /**
+     * 用户服务名称
+     */
+    const SERVICE_USER = 'user';
+
+    /**
+     * 消息服务名称
+     */
+    const SERVICE_MESSAGE = 'message';
+
     const APP_LIST = [
         'default' => 'GHCkSOgnDxxjpnAw1Ki1WhSX7g9X2auVo4QY3I8F1Cs',
+    ];
+
+    /**
+     * response 编码
+     */
+    const RESP_CODE_LIST = [
+        'SUCCESS' => 0,  //  成功
+        'PARAM_ERROR' => 2000,  //参数级2开头
+        'SIGN_ERROR' => 2001,   //签名错误
+        'REQUEST_EXPIRE' => 2002,   //请求过期
+        'UNKNOW_SERVICE' => 2003,   //未知方法
+        'AUTH_FAIL' => 4000,    //权限级4开头
     ];
 
     /**
