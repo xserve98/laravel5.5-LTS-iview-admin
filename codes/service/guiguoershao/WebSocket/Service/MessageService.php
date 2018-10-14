@@ -48,7 +48,9 @@ class MessageService
         }
 
         if ($onlineUserCount < 1) {
-            $response->setMsg('无在线客户端');
+            throw new \Exception('无在线客户端');
         }
+
+        return true;
     }
 }

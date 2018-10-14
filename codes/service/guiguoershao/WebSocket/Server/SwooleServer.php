@@ -57,6 +57,7 @@ class SwooleServer
      */
     private function __construct($ip, $port)
     {
+        Loader::redis(true);
         $this->server = new swoole_websocket_server($ip, $port);
         $this->user = Loader::user();
         $this->message = Loader::message();
@@ -100,8 +101,6 @@ class SwooleServer
                 //  参数鉴权
                 Loader::auth()->verify($params);
 
-                $this->user = Loader::user();
-
                 //  连贯操作 绑定用户监听器 推送消息 释放监听器
                 $this->bindUserListener($request->fd, $params['client_id'])
                     ->push($request->fd, Loader::response($params))
@@ -129,11 +128,9 @@ class SwooleServer
 
                 Util::ps('request', "http请求:" . json_encode([$params]));
 
-                $this->user = Loader::user();
-
                 switch ($params['service']) {
                     case Loader::config()::SERVICE_MESSAGE:
-                        $this->message->push($params['client_id'], Loader::response($params), $this->server);
+                        $this->message->push($params['client_id'], Loader::response($params), $this->user, $this->server);
                         break;
 
                     case Loader::config()::USER_ONLINE_COUNT:
@@ -161,7 +158,6 @@ class SwooleServer
         $server->on('close', function ($ws, $fd) {
             Util::ps('close', "关闭链接,fd:{$fd}");
             //  解除绑定
-            $this->user = Loader::user();
             $this->user->unbind($fd);
         });
 

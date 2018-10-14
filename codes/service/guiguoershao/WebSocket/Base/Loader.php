@@ -29,11 +29,12 @@ class Loader
 
     /**
      * 获取redis实例对象
+     * @param bool $instance
      * @return \Redis
      */
-    public static function redis(): \Redis
+    public static function redis($instance = false): \Redis
     {
-        if (!(self::$_redis instanceof \Redis)) {
+        if (!(self::$_redis instanceof \Redis) || $instance === true) {
             $config = Config::getInstance()->getRedisConfig();
 
             $redis = new \Redis();

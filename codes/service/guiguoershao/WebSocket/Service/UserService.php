@@ -61,6 +61,21 @@ class UserService
     }
 
     /**
+     * 取消绑定
+     * @param $clientId
+     * @param $fd
+     */
+    public function unbindByClientId($clientId, $fd)
+    {
+        Loader::redis()->sRemove(
+            $this->getUserKey($clientId),
+            $this->getFdKey($fd)
+        );
+
+        Loader::redis()->del($this->getFdKey($fd));
+    }
+
+    /**
      *
      * @param $clientId
      * @return string
@@ -90,6 +105,12 @@ class UserService
         return Loader::redis()->sMembers($this->getUserKey($clientId));
     }
 
+    /**
+     * 获取某个客户端在线连接数
+     * @param $clientId
+     * @param \swoole_websocket_server $server
+     * @throws \Exception
+     */
     public function getOnlineCount($clientId, \swoole_websocket_server $server)
     {
         $fdList = $this->findUserSet($clientId);
@@ -113,5 +134,29 @@ class UserService
         if ($onlineUserCount < 1) {
             throw new \Exception('无在线客户端');
         }
+    }
+
+
+    /**
+     * 清除过期用户
+     * @param $clientId
+     * @param $fd
+     * @return bool
+     */
+    public function clearInvalidUser($clientId, $fd)
+    {
+        $fdKey = $this->getFdKey($fd);
+        $verifyClientId = Loader::redis()->get($fdKey);
+
+        if ($verifyClientId != $clientId) {
+            $clientIdSetKey = $this->getUserKey($verifyClientId);
+            Loader::redis()->sRemove($clientIdSetKey, $fd);
+            $verifyClientIdSetKey = $this->getUserKey($verifyClientId);
+            if (!Loader::redis()->sIsMember($verifyClientIdSetKey, $fd)) {
+                Loader::redis()->del($fdKey);
+            }
+            return false;
+        }
+        return true;
     }
 }
