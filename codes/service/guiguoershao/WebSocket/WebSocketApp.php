@@ -41,19 +41,19 @@ class WebSocketApp
      * @param int $clientId
      * @return string
      */
-    public function createConnectUrl($clientId = 10086)
+    public function createConnectUrl($clientId)
     {
         return Loader::sign()->createConnectUrl($clientId);
     }
 
     /**
      * 普通消息推送
-     * @param int $clientId
+     * @param $clientId
      * @param $pushMsgType
      * @param array $data
      * @return mixed
      */
-    public function pushMessage($clientId = 10086, $pushMsgType, array $data = [])
+    public function pushMessage($clientId, $pushMsgType, array $data = [])
     {
         return Loader::request()->http($clientId, Loader::config()::SERVICE_MESSAGE, $pushMsgType, $data);
     }

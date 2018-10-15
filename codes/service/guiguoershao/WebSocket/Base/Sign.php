@@ -51,12 +51,6 @@ class Sign
     {
         $appName = Loader::config()->getAppName();
 
-        $signSecretKey = Loader::config()->getAppKeyByName($appName);
-
-        if (empty($signSecretKey)) {
-            throw new \Exception("创建签名缺少必要的签名秘钥");
-        }
-
         $query = [
             'app_name' => $appName,
             'client_id' => $clientId,
@@ -68,7 +62,7 @@ class Sign
             'data' => $data
         ];
 
-        $query['sign'] = $this->createSign($signSecretKey, $query);
+        $query['sign'] = $this->createSign($query);
 
         if (!$this->checkParams($query)) {
             return null;
@@ -91,7 +85,6 @@ class Sign
             empty($query['once']) ||
             empty($query['timestamp']) ||
             empty($query['expire_in']) ||
-            !isset($query['data']) ||
             empty($query['sign'])
         ) {
             return false;
@@ -101,16 +94,21 @@ class Sign
 
     /**
      * 创建签名
-     * @param $signSecretKey
      * @param array $params
      * @return string
      * @throws \Exception
      */
-    private function createSign($signSecretKey, array $params = [])
+    private function createSign(array $params = [])
     {
 
         if (!isset($params['app_name']) || empty($params['app_name'])) {
             throw new \Exception("创建签名缺少必要的应用名称");
+        }
+
+        $signSecretKey = Loader::config()->getAppKeyByName($params['app_name']);
+
+        if (empty($signSecretKey)) {
+            throw new \Exception("创建签名缺少必要的签名秘钥");
         }
 
         unset($params['sign']);

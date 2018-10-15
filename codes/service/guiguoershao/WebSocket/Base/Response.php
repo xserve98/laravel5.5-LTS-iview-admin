@@ -29,7 +29,7 @@ class Response
         isset($data['code']) && $this->setCode($data['code']);
         isset($data['service']) && $this->setService($data['service']);
         isset($data['msg']) && $this->setMessage($data['msg']);
-        isset($data['msgType']) && $this->setMsgType($data['msgType']);
+        isset($data['msg_type']) && $this->setMsgType($data['msg_type']);
         isset($data['data']) && $this->setData($data['data']);
     }
 
@@ -92,6 +92,6 @@ class Response
      */
     public function toJson()
     {
-        return json_encode($this->responseData, 'JSON_UNESCAPED_UNICODE');
+        return json_encode($this->responseData, JSON_UNESCAPED_UNICODE);
     }
 }

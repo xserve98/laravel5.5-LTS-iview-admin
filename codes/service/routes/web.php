@@ -12,16 +12,16 @@
 */
 
 Route::get('/', function () {
-    $arr = ['hello'=>'world'];
-    ChromePhp::info($arr);
-    \App\Helpers\SLog::info($arr);
+    $arr = ['hello'=>'world1111111111'];
+//    ChromePhp::info($arr);
+//    \App\Helpers\SLog::info($arr);
 
-    (new guiguoershao\WebSocket\WebSocketApp())->pushMessage(10086, 'basic', ['a'=>1, 'b'=>2]);
+    (new guiguoershao\WebSocket\WebSocketApp())->pushMessage(10086, 'count-data', $arr);
 //    return view('welcome');
 });
 
 Route::post('/getSign', function () {
-   return (new guiguoershao\WebSocket\WebSocketApp())->createConnectUrl();
+   return (new guiguoershao\WebSocket\WebSocketApp())->createConnectUrl(10086);
 });
 
 Auth::routes();

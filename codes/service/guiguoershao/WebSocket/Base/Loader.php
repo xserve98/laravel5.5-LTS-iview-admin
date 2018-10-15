@@ -30,19 +30,21 @@ class Loader
     /**
      * 获取redis实例对象
      * @param bool $instance
-     * @return \Redis
+     * @return MyRedis
      */
-    public static function redis($instance = false): \Redis
+    public static function redis($instance = false): MyRedis
     {
         if (!(self::$_redis instanceof \Redis) || $instance === true) {
-            $config = Config::getInstance()->getRedisConfig();
+            /*$config = Config::getInstance()->getRedisConfig();
 
             $redis = new \Redis();
             $redis->connect($config['host'], $config['port']);
             $config['pass'] && $redis->auth($config['pass']);
             $redis->select($config['db']);
 
-            self::$_redis = $redis;
+            self::$_redis = $redis;*/
+
+            self::$_redis = MyRedis::getInstance($instance);
         }
 
         return self::$_redis;

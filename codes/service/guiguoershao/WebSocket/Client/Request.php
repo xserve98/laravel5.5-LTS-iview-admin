@@ -30,7 +30,7 @@ class Request
      */
     public function http($clientId, $serviceName, $pushMsgType, array $data)
     {
-        $query = Loader::sign()->createRequestParams($clientId, $serviceName, $pushMsgType);
+        $query = Loader::sign()->createRequestParams($clientId, $serviceName, $pushMsgType, $data);
 
         if (empty($query)) {
             throw new \Exception("请求参数不能为空,请检查");

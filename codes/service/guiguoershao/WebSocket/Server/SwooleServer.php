@@ -94,7 +94,6 @@ class SwooleServer
             Util::ps('open', "用户接入fd:{$request->fd}");
 
             try {
-
                 //  接收请求参数
                 $params = $request->get;
 
@@ -103,11 +102,13 @@ class SwooleServer
 
                 //  连贯操作 绑定用户监听器 推送消息 释放监听器
                 $this->bindUserListener($request->fd, $params['client_id'])
-                    ->push($request->fd, Loader::response($params))
-                    ->unbindUserListener($request->fd);
+                    ->push($request->fd, Loader::response($params));
 
             } catch (\Exception $exception) {
                 //  记录错误信息
+                Util::ps('open', "用户接入错误信息:".$exception->getMessage()."|".$exception->getFile().$exception->getLine());
+
+                $this->unbindUserListener($request->fd);
             }
         });
 
@@ -119,14 +120,15 @@ class SwooleServer
         });
 
         $server->on('request', function (swoole_http_request $request, swoole_http_response $response) use ($server) {
+            Loader::redis(true);
             try {
                 //  接收请求参数
                 $params = property_exists($request, 'post') ? $request->post : (property_exists($request, 'get') ? $request->get : []);
 
+                Util::ps('request', "http请求:" . json_encode([$params]));
+
                 //  参数鉴权
                 Loader::auth()->verify($params);
-
-                Util::ps('request', "http请求:" . json_encode([$params]));
 
                 switch ($params['service']) {
                     case Loader::config()::SERVICE_MESSAGE:
@@ -148,6 +150,7 @@ class SwooleServer
                 $response->end("<h1>Hello Swoole. #" . rand(1000, 9999) . "</h1>");
             } catch (\Exception $exception) {
                 //  记录错误信息
+                Util::ps('request', "http请求:" . $exception->getMessage());
             }
 
         });
