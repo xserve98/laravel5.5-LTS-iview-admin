@@ -96,7 +96,7 @@ class SwooleServer
             try {
 
                 //  接收请求参数
-                $params = property_exists($request, 'post') ? $request->post : (property_exists($request, 'get') ? $request->get : []);
+                $params = $request->get;
 
                 //  参数鉴权
                 Loader::auth()->verify($params);
