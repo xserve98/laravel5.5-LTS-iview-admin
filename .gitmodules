@@ -1,3 +1,0 @@
-[submodule "codes/client/web-backend/iview-admin"]
-	path = codes/client/web-backend/iview-admin
-	url = https://github.com/iview/iview-admin.git
